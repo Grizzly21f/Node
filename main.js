@@ -49,7 +49,7 @@ app.post('/users', async (req, res) => {
     try {
         const newData = req.body;
 
-        // Валідація імені (більше 3 символів)
+      
         if (newData.name.length <= 3) {
             return res.status(400).json({ error: 'Name should be more than 3 characters' });
         }
