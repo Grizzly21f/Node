@@ -53,17 +53,23 @@ class UserController {
         const newData = req.body;
 
         try {
+            console.log('Updating user with ID:', userId, 'Data:', newData);
+
             const updatedUser = await userService.update(userId, newData);
+
             if (updatedUser) {
+                console.log('User updated successfully:', updatedUser);
                 res.json(updatedUser);
             } else {
+                console.log('User not found.');
                 res.status(404).json({ error: 'User not found' });
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error updating user:', error);
             res.status(500).json({ error: 'Internal Server Error', details: error.message });
         }
     }
+
 
 
     public async delete(req: Request, res: Response) {
