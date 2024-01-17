@@ -1,5 +1,8 @@
-import { IUser } from '../interfaces/user.nterface';
+import { FilterQuery } from "mongoose";
+
 import { User } from "../models/user.model";
+
+import { IUser } from "../interfaces/user.nterface";
 
 class UserRepository {
     public async getAll(): Promise<IUser[]> {
@@ -8,6 +11,10 @@ class UserRepository {
 
     public async getAllById(id: string): Promise<IUser> {
         return await User.findOne({ _id: id });
+    }
+
+    public async getOneByParams(params: FilterQuery<IUser>): Promise<IUser> {
+        return await User.findOne(params);
     }
 
     public async update(id: string, body: Partial<IUser>): Promise<IUser> {

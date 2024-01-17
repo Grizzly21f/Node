@@ -9,7 +9,6 @@ router.get('',userControler.getAll)
 
 router.get('/:id',userControler.getAllById);
 
-
 router.put('/:id',userMiddleware.validateUserName,userMiddleware.validateUserNotExist, userControler.update);
 
 router.delete('/:id', userControler.delete);
