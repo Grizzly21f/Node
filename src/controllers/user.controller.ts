@@ -1,97 +1,55 @@
 import {Request, Response} from "express";
 
 import {userService} from "../services/user.service";
+import {IUser} from "../interfaces/user.nterface";
 
 class UserController {
     public async getAll(req: Request, res: Response) {
         try {
-            const jsonData = await userService.getAll();
-            res.json(jsonData);
-        } catch (error) {
-            console.error('Error:', error);
-            res.status(500).json({error: 'Internal Server Error', details: error.message});
-        }
+            const users = await userService.getAll();
 
+            return res.json({ data: users });
+        } catch (e) {
+           ;
+        }
     }
 
     public async getAllById(req: Request, res: Response) {
         try {
-            const { id } = req.params;
-            const userId = +id;
+            const id = req.params.id;
 
-            const user = await userService.getAllById(userId);
+            const user = await userService.getAllById(id);
 
-            if (!user) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-
-            res.json(user);
-        } catch (error) {
-            console.error('Error:', error);
-            res.status(500).json({ error: 'Internal Server Error', details: error.message });
+            res.json({ data: user });
+        } catch (e) {
+            ;
         }
     }
-
-    public async create(req: Request, res: Response) {
-        try {
-            const newData = req.body;
-
-            const user = await userService.create(newData);
-
-            res.json(user);
-        } catch (error) {
-            console.error('Error:', error);
-            res.status(500).json({ error: 'Internal Server Error', details: error.message });
-        }
-    }
-
-
 
     public async update(req: Request, res: Response) {
-        const { id } = req.params;
-        const userId = +id;
-        const newData = req.body;
-
         try {
-            console.log('Updating user with ID:', userId, 'Data:', newData);
+            const id = req.params.id;
+            const body = req.body as Partial<IUser>;
 
-            const updatedUser = await userService.update(userId, newData);
+            const user = await userService.update(id, body);
 
-            if (updatedUser) {
-                console.log('User updated successfully:', updatedUser);
-                res.json(updatedUser);
-            } else {
-                console.log('User not found.');
-                res.status(404).json({ error: 'User not found' });
-            }
-        } catch (error) {
-            console.error('Error updating user:', error);
-            res.status(500).json({ error: 'Internal Server Error', details: error.message });
+            res.status(201).json(user);
+        } catch (e) {
+            ;
         }
     }
-
-
 
     public async delete(req: Request, res: Response) {
-        const { id } = req.params;
-        const userId = +id;
-
         try {
-            const deletedUser = await userService.delete(userId);
+            const id = req.params.id;
 
-            if (!deletedUser) {
-                return res.status(404).json({ error: 'User not found' });
-            }
+            await userService.delete(id);
 
-            res.json({ id: deletedUser.id });
-        } catch (error) {
-            console.error('Error:', error);
-            res.status(500).json({ error: 'Internal Server Error', details: error.message });
+            res.sendStatus(204);
+        } catch (e) {
+            ;
         }
     }
-
-
-
 }
 
 

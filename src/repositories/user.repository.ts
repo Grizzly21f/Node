@@ -1,20 +1,3 @@
-// import {read ,write} from "../fs.service";
-// import {IUser} from "../interfaces/user.nterface";
-//
-// class UserRepository {
-//     public async getAll(): Promise<IUser[]> {
-//        const jsonData = await read();
-//
-//        return jsonData;
-//     }
-//
-//     public async write(jsonData): Promise<void> {
-//         await write(jsonData);
-//     }
-// }
-//
-// export const userRepository = new UserRepository();
-
 import { IUser } from '../interfaces/user.nterface';
 import { User } from "../models/user.model";
 
@@ -23,11 +6,11 @@ class UserRepository {
         return await User.find({});
     }
 
-    public async getById(id: string): Promise<IUser> {
+    public async getAllById(id: string): Promise<IUser> {
         return await User.findOne({ _id: id });
     }
 
-    public async updateById(id: string, body: Partial<IUser>): Promise<IUser> {
+    public async update(id: string, body: Partial<IUser>): Promise<IUser> {
         return await User.findByIdAndUpdate(id, body, { returnDocument: "after" });
     }
 
@@ -35,7 +18,7 @@ class UserRepository {
         return await User.create(body);
     }
 
-    public async deleteById(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         await User.deleteOne({ _id: id });
     }
 }
