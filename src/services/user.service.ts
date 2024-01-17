@@ -1,5 +1,6 @@
 import {userRepository} from "../repositories/user.repository";
 import {IUser} from "../interfaces/user.nterface";
+import {User} from "../models/user.model";
 
 class UserService {
     public async getAll ():Promise<IUser[]> {
@@ -9,19 +10,17 @@ class UserService {
 
     public async getAllById(userId: number): Promise<IUser | undefined> {
         try {
-            const users = await userRepository.getAll();
-
             if (userId <= 0) {
                 throw new Error('Invalid user ID');
             }
 
-            const user = users.find((u: IUser) => u.id === userId);
+            const users = await userRepository.getById(userId.toString()); // Викликати getById з userId
 
-            if (!user) {
+            if (!users) {
                 throw new Error('User not found');
             }
 
-            return user;
+            return users;
         } catch (error) {
             throw error;
         }
@@ -39,7 +38,7 @@ class UserService {
 
             users.push(newData);
 
-            await userRepository.write(users);
+            await userRepository.create(newData); // Викликати метод create із новим користувачем, а не масивом користувачів
 
             return newData;
         } catch (error) {
@@ -47,24 +46,23 @@ class UserService {
         }
     }
 
+
     public async update(userId: number, newData: IUser): Promise<IUser> {
         try {
-            const users = await userRepository.getAll();
-            const userIndex = users.findIndex((user: IUser) => user.id === userId);
+            const updatedUser = await User.findByIdAndUpdate(userId.toString(), newData, { new: true });
 
-            if (userIndex === -1) {
+            if (!updatedUser) {
                 throw new Error('User not found');
             }
 
-            users[userIndex] = { ...users[userIndex], ...newData };
-
-            await userRepository.write(users);
-
-            return users[userIndex];
+            return updatedUser;
         } catch (error) {
             throw error;
         }
     }
+
+
+
 
     public async delete(userId: number): Promise<{ id: number }> {
         try {
@@ -76,13 +74,15 @@ class UserService {
             }
 
             const deletedUser = users.splice(userIndex, 1)[0];
-            await userRepository.write(users);
+            await userRepository.deleteById(userId.toString()); // Викликати метод deleteById із параметром userId
 
             return { id: deletedUser.id };
         } catch (error) {
             throw error;
         }
     }
+
+
 
 }
 
