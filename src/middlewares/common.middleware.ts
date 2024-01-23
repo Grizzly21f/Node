@@ -1,45 +1,20 @@
-import { Request, Response, NextFunction } from 'express';
-import { userService } from '../services/user.service';
+import { NextFunction, Request, Response } from "express";
+import { isObjectIdOrHexString } from "mongoose";
 
-class UserMiddleware {
-    public validateUserId(req: Request, res: Response, next: NextFunction) {
-        const userId = +req.params.id;
-
-        if (isNaN(userId) || userId <= 0) {
-            return res.status(400).json({ error: 'Invalid user ID' });
-        }
-
-        next();
-    }
-
-    public validateUserName(req: Request, res: Response, next: NextFunction) {
-        const { name } = req.body;
-
-        if (!name || name.length <= 3) {
-            return res.status(400).json({ error: 'Name should be more than 3 characters' });
-        }
-
-        next();
-    }
-
-    public async validateUserNotExist(req: Request, res: Response, next: NextFunction) {
+class CommonMiddleware {
+    public isIdValid(req: Request, res: Response, next: NextFunction) {
         try {
-            const { id } = req.body;
+            const id = req.params.id;
 
-            if (id <= 0) {
-                return res.status(400).json({ error: 'Invalid user ID' });
-            }
-
-            if (id && await userService.getAllById(id)) {
-                return res.status(400).json({ error: 'User with this ID already exists' });
+            if (!isObjectIdOrHexString(id)) {
+                throw new Error("wrong ID param");
             }
 
             next();
-        } catch (error) {
-            res.status(500).json({ error: 'Internal Server Error' });
+        } catch (e) {
+            next(e);
         }
     }
 }
 
-const userMiddleware = new UserMiddleware();
-export default userMiddleware;
+export const commonMiddleware = new CommonMiddleware();

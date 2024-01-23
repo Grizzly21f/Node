@@ -1,63 +1,48 @@
-import {userRepository} from "../repositories/user.repository";
+import { ApiError } from "../errors/api.error";
+import { userRepository } from "../repositories/user.repository";
+
+import { ITokenPayload } from "./token.service";
 import {IUser} from "../interfaces/user.nterface";
 
-
 class UserService {
-    public async getAll ():Promise<IUser[]> {
-        const users = await userRepository.getAll();
-        return users;
+    public async getAll(): Promise<IUser[]> {
+        return await userRepository.getAll();
     }
 
-    public async getAllById(id: string): Promise<IUser> {
-        const user = await userRepository.getAllById(id);
+    public async getById(id: string): Promise<IUser> {
+        const user = await userRepository.getById(id);
         if (!user) {
-            throw new Error("User not found");
+            throw new ApiError("User not found", 422);
         }
         return user;
     }
 
-    public async create(newData: IUser): Promise<IUser> {
-        try {
-            if (!newData.name || newData.name.length <= 3) {
-                throw new Error('Name should be provided and more than 3 characters');
-            }
-
-            const users = await userRepository.getAll();
-
-            newData.id = users.length + 1;
-
-            users.push(newData);
-
-            await userRepository.create(newData);
-
-            return newData;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-
-    public async update(id: string, body: Partial<IUser>): Promise<IUser> {
-        const user = await userRepository.getAllById(id);
+    public async getMe(jwtPayload: ITokenPayload): Promise<IUser> {
+        const user = await userRepository.getById(jwtPayload.userId);
         if (!user) {
-            throw new Error("User not found");
+            throw new ApiError("You cant get this user", 403);
         }
-        return await userRepository.update(id, body);
+        return user;
     }
 
-
-
-
-    public async delete(id: string): Promise<void> {
-        const user = await userRepository.getAllById(id);
+    public async updateMe(
+        jwtPayload: ITokenPayload,
+        body: Partial<IUser>,
+    ): Promise<IUser> {
+        const user = await userRepository.getById(jwtPayload.userId);
         if (!user) {
-            throw new Error("User not found");
+            throw new ApiError("User not found", 403);
         }
-        await userRepository.delete(id);
+        return await userRepository.updateById(jwtPayload.userId, body);
     }
 
-
-
+    public async deleteMe(jwtPayload: ITokenPayload): Promise<void> {
+        const user = await userRepository.getById(jwtPayload.userId);
+        if (!user) {
+            throw new ApiError("User not found", 403);
+        }
+        await userRepository.deleteById(jwtPayload.userId);
+    }
 }
 
 export const userService = new UserService();
