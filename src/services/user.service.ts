@@ -1,7 +1,8 @@
 import { ApiError } from "../errors/api.error";
+import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
-import {IUser} from "../interfaces/user.nterface";
 import {ITokenPayload} from "./token.service";
+import {IUser} from "../interfaces/user.nterface";
 
 
 class UserService {
@@ -41,7 +42,10 @@ class UserService {
         if (!user) {
             throw new ApiError("User not found", 403);
         }
-        await userRepository.deleteById(jwtPayload.userId);
+        await Promise.all([
+            userRepository.deleteById(jwtPayload.userId),
+            tokenRepository.deleteManyBy(jwtPayload.userId),
+        ]);
     }
 }
 

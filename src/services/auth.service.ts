@@ -4,7 +4,7 @@ import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
 import { passwordService } from "./password.service";
 import { ITokenPayload, ITokensPair, tokenService } from "./token.service";
-import {ILogin} from "../interfaces/auth.interface";
+import { ILogin } from "../interfaces/auth.interface";
 import {IUser} from "../interfaces/user.nterface";
 import {EEmailAction} from "../enums/email-action.enum";
 import {emailService} from "./email.service";
@@ -142,6 +142,7 @@ class AuthService {
         await Promise.all([
             userRepository.updateById(payload.userId, {
                 Verified: true,
+
             }),
             tokenRepository.deleteActionTokenByParams({ actionToken }),
         ]);

@@ -1,7 +1,6 @@
 import { ActionToken } from "../models/action.model";
 import { Token } from "../models/token.model";
-import {IToken} from "../interfaces/token.type";
-import {IActionToken} from "../interfaces/token.interface";
+import {IActionToken, IToken} from "../interfaces/token.interface";
 
 
 class TokenRepository {
