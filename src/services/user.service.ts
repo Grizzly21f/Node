@@ -1,8 +1,8 @@
 import { ApiError } from "../errors/api.error";
 import { userRepository } from "../repositories/user.repository";
-
-import { ITokenPayload } from "./token.service";
 import {IUser} from "../interfaces/user.nterface";
+import {ITokenPayload} from "./token.service";
+
 
 class UserService {
     public async getAll(): Promise<IUser[]> {

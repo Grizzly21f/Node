@@ -1,7 +1,5 @@
 import { model, Schema } from "mongoose";
-
-
-import { IUser } from "../interfaces/user.nterface";
+import {IUser} from "../interfaces/user.nterface";
 
 const userSchema = new Schema(
     {
@@ -20,6 +18,10 @@ const userSchema = new Schema(
             min: 1,
             max: 55,
             required: true,
+        },
+        Verified: {
+            type: Boolean,
+            default: false,
         },
         password: {
             type: String,

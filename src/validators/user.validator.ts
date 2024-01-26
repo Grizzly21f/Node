@@ -16,7 +16,6 @@ export class UserValidator {
         "string.min":
             "{{#label}} length must be at least {{#limit}} characters long2",
 
-
     });
     private static age = joi.number().min(18).max(100).integer();
 
@@ -35,5 +34,13 @@ export class UserValidator {
     public static login = joi.object({
         email: this.email.required(),
         password: this.password.required(),
+    });
+
+    public static forgotPassword = joi.object({
+        email: this.email.required(),
+    });
+
+    public static setForgotPassword = joi.object({
+        newPassword: this.password.required(),
     });
 }

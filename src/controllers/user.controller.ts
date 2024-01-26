@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-import { ITokenPayload } from "../services/token.service";
 import { userService } from "../services/user.service";
+import {ITokenPayload} from "../services/token.service";
 import {IUser} from "../interfaces/user.nterface";
 
 

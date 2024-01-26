@@ -41,6 +41,49 @@ class AuthController {
             next(e);
         }
     }
+
+
+    public async forgotPassword(req: Request, res: Response, next: NextFunction) {
+        try {
+            const user = req.res.locals as IUser;
+
+            await authService.forgotPassword(user);
+
+            return res.json("OK");
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async setForgotPassword(
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) {
+        try {
+            const token = req.params.token;
+            const newPassword = req.body.newPassword;
+
+            await authService.setForgotPassword(newPassword, token);
+
+            return res.json("OK");
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async verify(req: Request, res: Response, next: NextFunction) {
+        try {
+            const token = req.params.token;
+
+            await authService.verify(token);
+
+            return res.json("OK");
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 export const authController = new AuthController();
