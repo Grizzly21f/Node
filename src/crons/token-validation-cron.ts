@@ -5,7 +5,7 @@ import {userRepository} from "../repositories/user.repository";
 import {tokenRepository} from "../repositories/token.repository";
 import {emailService} from "../services/email.service";
 import {EEmailAction} from "../enums/email-action.enum";
-import {ApiError} from "../errors/api.error";
+import {ApiError} from "../../../Weather/src/errors/api.error";
 
 
 

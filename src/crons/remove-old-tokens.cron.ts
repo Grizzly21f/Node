@@ -2,7 +2,7 @@ import { CronJob } from "cron";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
-import { ApiError } from "../errors/api.error";
+import { ApiError } from "../../../Weather/src/errors/api.error";
 import { tokenRepository } from "../repositories/token.repository";
 
 dayjs.extend(utc);

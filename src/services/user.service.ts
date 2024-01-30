@@ -1,4 +1,4 @@
-import { ApiError } from "../errors/api.error";
+import { ApiError } from "../../../Weather/src/errors/api.error";
 import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
 import {ITokenPayload} from "./token.service";
