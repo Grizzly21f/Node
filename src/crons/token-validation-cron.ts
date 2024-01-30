@@ -21,7 +21,7 @@ const tokenValidation = async function () {
             users.map(async (user)=>{
 
                 const entity = await tokenRepository.getOneBy({_userId:user._id});
-                if(entity){
+                if(!entity){
                     await emailService.sendMail(user.email,EEmailAction.TOKEN_VALIDATION,{name:user.name})
                 }
             })
