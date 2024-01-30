@@ -13,6 +13,7 @@ class UserRepository {
         return await User.findOne({ _id: id });
     }
 
+
     public async getOneByParams(params: FilterQuery<IUser>): Promise<IUser> {
         return await User.findOne(params);
     }

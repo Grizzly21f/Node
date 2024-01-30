@@ -9,4 +9,8 @@ export const emailTemplates = {
         templateName: "forgot-password",
         subject: "Restore password",
     },
+    [EEmailAction.TOKEN_VALIDATION]: {
+        templateName: "token-valid",
+        subject: "Remind",
+    }
 };
